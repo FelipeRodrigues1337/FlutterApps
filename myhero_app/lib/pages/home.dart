@@ -4,35 +4,76 @@ import 'package:myheroapp/models/list.model.dart';
 import 'package:myheroapp/widgets/hero.card.widget.dart';
 import 'package:myheroapp/widgets/hero.item.widget.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   List<HeroModel> heroList = [];
   var listModel = new ListModel();
+  int _selectedIndex = 0;
 
-  Home() {
+  _HomeState() {
     heroList = listModel.listHero;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.red.withOpacity(1),
+        elevation: 0,
+        title: Text(
+          "MY HERO !",
+          style: TextStyle(
+            fontFamily: "hero",
+            fontSize: 38,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Container(
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              color: Colors.white,
+              color: Colors.black12,
               height: 400,
               child: PageView.builder(
                 itemCount: heroList.length,
-                itemBuilder: (context, index){
+                controller: PageController(viewportFraction: 0.9),
+                onPageChanged: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
                   final hero = heroList[index];
 
-                  return  HeroCard(
-                    image: hero.image,
-                    name: hero.name,
-                    nickname: hero.nickname,
+                  final _isSelectedIndex = _selectedIndex == index;
+                  final _scale = _isSelectedIndex ? 1.0 : 0.85;
+
+                  return TweenAnimationBuilder<double>(
+                    duration: Duration(milliseconds: 400),
+                    tween: Tween(
+                      begin: _scale,
+                      end: _scale,
+                    ),
+                    child: HeroCard(
+                      image: hero.image,
+                      name: hero.name,
+                      nickname: hero.nickname,
+                      power: hero.power,
+                      gif: hero.gif,
+                    ),
+                    builder: (context, scale, child) {
+                      return Transform.scale(
+                        scale: scale,
+                        child: child,
+                      );
+                    },
                   );
                 },
               ),

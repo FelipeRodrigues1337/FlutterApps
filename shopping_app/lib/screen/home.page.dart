@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
               ),
               Text(
                 "Categories",
-                style:Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline,
               ),
               SizedBox(
                 height: 10,
@@ -45,9 +45,7 @@ class HomePage extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       "Best Selling",
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
+                      style: Theme.of(context).textTheme.headline,
                     ),
                     FlatButton(
                       child: Text(
